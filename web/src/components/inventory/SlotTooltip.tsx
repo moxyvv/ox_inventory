@@ -84,15 +84,18 @@ const SlotTooltip: React.ForwardRefRenderFunction<
                   {Locale.ui_tint}: {item.metadata.weapontint}
                 </p>
               )}
-              {additionalMetadata.map((data: { metadata: string; value: string }, index: number) => (
-                <Fragment key={`metadata-${index}`}>
-                  {item.metadata && item.metadata[data.metadata] && (
+              {additionalMetadata.map((data: { metadata: string; value: string }, index: number) => {
+                const metaValue = item.metadata?.[data.metadata];
+                if (metaValue === undefined || metaValue === null || typeof metaValue === 'object') return null;
+
+                return (
+                  <Fragment key={`metadata-${index}`}>
                     <p>
-                      {data.value}: {item.metadata[data.metadata]}
+                      {data.value}: {metaValue}
                     </p>
-                  )}
-                </Fragment>
-              ))}
+                  </Fragment>
+                );
+              })}
             </>
           ) : (
             <div className="tooltip-ingredients">
